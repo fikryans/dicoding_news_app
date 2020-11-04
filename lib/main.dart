@@ -1,4 +1,5 @@
 import 'package:dicoding_news_app/article.dart';
+import 'package:dicoding_news_app/detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,8 @@ void main() {
 }
 
 class NewsApp extends StatelessWidget {
+  static const routeName = '/article_detail';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,11 +20,16 @@ class NewsApp extends StatelessWidget {
       ),
       initialRoute: NewsListPage.routeName,
       routes: {
-        NewsListPage.routeName:(context) => NewsListPage(),
+        NewsListPage.routeName: (context) => NewsListPage(),
+        ArticleDetailPage.routeName: (context) => ArticleDetailPage(
+              article: ModalRoute.of(context).settings.arguments,
+            ),
+        ArticleWebView.routeName: (context) => ArticleWebView(
+              url: ModalRoute.of(context).settings.arguments,
+            )
       },
     );
   }
-
 }
 
 class NewsListPage extends StatelessWidget {
@@ -35,7 +43,7 @@ class NewsListPage extends StatelessWidget {
       ),
       body: FutureBuilder<String>(
         future:
-        DefaultAssetBundle.of(context).loadString('assets/articles.json'),
+            DefaultAssetBundle.of(context).loadString('assets/articles.json'),
         builder: (context, snapshot) {
           final List<Article> articles = parseArticles(snapshot.data);
           return ListView.builder(
@@ -45,23 +53,24 @@ class NewsListPage extends StatelessWidget {
             },
           );
         },
-
       ),
     );
   }
+
   Widget _buildArticleItem(BuildContext context, Article article) {
     return ListTile(
       contentPadding:
-      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       leading: Image.network(
         article.urlToImage,
         width: 100,
       ),
       title: Text(article.title),
       subtitle: Text(article.author),
+      onTap: () {
+        Navigator.pushNamed(context, ArticleDetailPage.routeName,
+            arguments: article);
+      },
     );
   }
 }
-
-
-

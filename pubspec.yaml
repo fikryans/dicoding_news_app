@@ -10,8 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  
   cupertino_icons: ^1.0.0
+  webview_flutter: 1.0.5
 
 dev_dependencies:
   flutter_test:
@@ -23,5 +24,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/json/articles.json
+    - assets/articles.json
+  
 
